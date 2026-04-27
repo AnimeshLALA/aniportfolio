@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import animeshPhoto from '../assets/animesh Upscaled.png';
 
 const ResumeSection = () => {
   const fadeInUp = {
