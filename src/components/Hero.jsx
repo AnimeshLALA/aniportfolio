@@ -84,7 +84,7 @@ const Hero = () => {
         }}>
           <p className="monolith" style={{ marginBottom: '10px', color: 'var(--primary-red)' }}>2+ Years Experience ———</p>
           <p>Started with posters. Graduated to products.
-Now designing data-driven experiences that actually make sense to the people using them.
+Now designing data-driven experiences that actually make sense to the people using them.</p>
         </div>
       )}
       
