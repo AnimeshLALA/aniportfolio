@@ -2,9 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import CustomCursor from './CustomCursor';
 
+const useWindowWidth = () => {
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+  useEffect(() => {
+    const handler = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return width;
+};
+
 const Layout = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('01');
+  const width = useWindowWidth();
+
+  const isMobile = width <= 767;
+  const isTablet = width <= 1024;
 
   const menuLinks = [
     { name: 'HOME', id: 'hero' },
@@ -47,9 +61,9 @@ const Layout = ({ children }) => {
 
       <header style={{
         position: 'fixed',
-        top: '40px',
-        left: '80px',
-        right: '80px',
+        top: isMobile ? '16px' : '40px',
+        left: isMobile ? '16px' : isTablet ? '40px' : '80px',
+        right: isMobile ? '16px' : isTablet ? '40px' : '80px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -57,7 +71,7 @@ const Layout = ({ children }) => {
         pointerEvents: 'none'
       }}>
         <div className="monolith" style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-          <span style={{ fontSize: '1rem', letterSpacing: '0.1em' }}>ANIMESH KUMAR</span>
+          <span style={{ fontSize: isMobile ? '0.75rem' : '1rem', letterSpacing: '0.1em' }}>ANIMESH KUMAR</span>
         </div>
         <button
           className="monolith"
@@ -68,8 +82,8 @@ const Layout = ({ children }) => {
             backgroundColor: 'var(--primary-red)',
             color: 'white',
             border: 'none',
-            padding: '5px 20px',
-            fontSize: '0.85rem',
+            padding: isMobile ? '5px 14px' : '5px 20px',
+            fontSize: isMobile ? '0.7rem' : '0.85rem',
             fontWeight: 900,
             cursor: 'pointer',
             display: 'flex',
@@ -97,7 +111,8 @@ const Layout = ({ children }) => {
               backgroundColor: 'var(--bg-cream)',
               zIndex: 9999,
               display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
+              gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+              gridTemplateRows: isMobile ? 'repeat(2, 1fr)' : '1fr',
             }}
           >
             {menuLinks.map((link, i) => {
@@ -108,6 +123,10 @@ const Layout = ({ children }) => {
                 { initial: { x: 100, opacity: 0 }, animate: { x: 0, opacity: 1 } },
               ];
               
+              // Border logic for responsive grid
+              const isRightEdge = isMobile ? (i % 2 === 1) : (i === 3);
+              const isBottomRow = isMobile ? (i >= 2) : false;
+
               return (
                 <motion.a
                   key={link.name}
@@ -124,7 +143,8 @@ const Layout = ({ children }) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     textDecoration: 'none',
-                    borderRight: i < 3 ? '1px solid rgba(26, 26, 26, 0.1)' : 'none',
+                    borderRight: !isRightEdge ? '1px solid rgba(26, 26, 26, 0.1)' : 'none',
+                    borderBottom: !isBottomRow && isMobile ? '1px solid rgba(26, 26, 26, 0.1)' : 'none',
                     position: 'relative',
                     overflow: 'hidden',
                     cursor: 'pointer',
@@ -176,7 +196,7 @@ const Layout = ({ children }) => {
                     </motion.span>
                     <motion.h3 
                       className="monolith" 
-                      style={{ fontSize: '3.5rem', fontWeight: 900, letterSpacing: '-0.02em' }}
+                      style={{ fontSize: isMobile ? '2rem' : '3.5rem', fontWeight: 900, letterSpacing: '-0.02em' }}
                       variants={{
                         hover: { color: 'var(--bg-cream)' }
                       }}

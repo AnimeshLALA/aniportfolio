@@ -1,7 +1,17 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import Portrait3D from './Portrait3D';
 import Sticker from './Sticker';
+
+const useWindowWidth = () => {
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+  useEffect(() => {
+    const handler = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return width;
+};
 
 const Hero = () => {
   const { scrollYProgress } = useScroll();
@@ -10,6 +20,9 @@ const Hero = () => {
     damping: 30,
     restDelta: 0.001
   });
+  const width = useWindowWidth();
+  const isMobile = width <= 767;
+  const isTablet = width <= 1024;
 
   const titleY = useTransform(smoothProgress, [0, 0.2], [0, 150]);
   const opacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
@@ -44,7 +57,7 @@ const Hero = () => {
       }}>
         <motion.div style={{ y: titleY, opacity: 1 }}>
           <h1 style={{ 
-            fontSize: '18rem', 
+            fontSize: isMobile ? 'clamp(4rem, 20vw, 8rem)' : isTablet ? 'clamp(7rem, 15vw, 13rem)' : '18rem',
             color: 'var(--primary-red)', 
             lineHeight: 0.85, 
             letterSpacing: '-0.06em',
@@ -58,24 +71,26 @@ const Hero = () => {
         </motion.div>
       </div>
 
-      <div style={{
-        position: 'absolute',
-        bottom: '80px',
-        right: '100px',
-        maxWidth: '300px',
-        fontSize: '0.9rem',
-        lineHeight: 1.6,
-        textAlign: 'right',
-        zIndex: 10
-      }}>
-        <p className="monolith" style={{ marginBottom: '10px', color: 'var(--primary-red)' }}>HISTORY ———</p>
-        <p>The first of the three great unifiers of Japan, known for his revolutionary military tactics and ruthless ambition.</p>
-      </div>
+      {!isMobile && (
+        <div style={{
+          position: 'absolute',
+          bottom: '80px',
+          right: isTablet ? '40px' : '100px',
+          maxWidth: isTablet ? '220px' : '300px',
+          fontSize: '0.9rem',
+          lineHeight: 1.6,
+          textAlign: 'right',
+          zIndex: 10
+        }}>
+          <p className="monolith" style={{ marginBottom: '10px', color: 'var(--primary-red)' }}>HISTORY ———</p>
+          <p>The first of the three great unifiers of Japan, known for his revolutionary military tactics and ruthless ambition.</p>
+        </div>
+      )}
       
       <div style={{
         position: 'absolute',
-        bottom: '80px',
-        left: '100px',
+        bottom: isMobile ? '40px' : '80px',
+        left: isMobile ? '16px' : isTablet ? '40px' : '100px',
         zIndex: 10
       }}>
         <p className="monolith" style={{ fontSize: '0.7rem', letterSpacing: '0.2em', opacity: 0.5 }}>SCROLL TO EXPLORE ↓</p>

@@ -1,7 +1,17 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 import macroImg from '../assets/Macro.png';
+
+const useWindowWidth = () => {
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+  useEffect(() => {
+    const handler = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return width;
+};
 
 const projects = [
   {
@@ -50,10 +60,14 @@ const projects = [
   },
 ];
 
-const TAB_HEIGHT = 36; // px — height of each folder tab
+const TAB_HEIGHT = 36;
 
 const ProjectCard = ({ project, index }) => {
   const ref = useRef(null);
+  const width = useWindowWidth();
+  const isMobile = width <= 767;
+  const isTablet = width <= 1024;
+
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
   const imgY = useTransform(scrollYProgress, [0, 1], ['6%', '-6%']);
   const isDark = project.textColor === '#111212';
@@ -63,26 +77,26 @@ const ProjectCard = ({ project, index }) => {
       ref={ref}
       id={`pj${project.id}`}
       style={{
-        position: 'sticky',
-        top: index * TAB_HEIGHT + 80,
+        position: isMobile ? 'relative' : 'sticky',
+        top: isMobile ? 'auto' : index * TAB_HEIGHT + 80,
         zIndex: index + 1,
         width: '100%',
-        height: '100vh',
-        maxHeight: 900,
+        height: isMobile ? 'auto' : '100vh',
+        maxHeight: isMobile ? 'none' : 900,
         backgroundColor: 'transparent',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         overflow: 'hidden',
-        padding: `0 5% 0`,
+        padding: isMobile ? '0 4% 0' : '0 5% 0',
         boxSizing: 'border-box',
+        marginBottom: isMobile ? '24px' : 0,
       }}
     >
-      {/* ── Card wrapper: aligned to orange guide columns (5% gutters each side) ── */}
       <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
 
-        {/* ── Folder Tab: left-aligned within the card column ── */}
+        {/* Folder Tab */}
         <div style={{
           display: 'inline-flex',
           alignSelf: 'flex-start',
@@ -108,11 +122,11 @@ const ProjectCard = ({ project, index }) => {
           </span>
         </div>
 
-        {/* ── Card Body: landscape 50/50 grid ── */}
+        {/* Card Body */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          height: 500,
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          height: isMobile ? 'auto' : 500,
           border: `2px solid ${project.panelColor}`,
           borderTop: 'none',
           overflow: 'hidden',
@@ -122,10 +136,11 @@ const ProjectCard = ({ project, index }) => {
           <div style={{
             backgroundColor: project.panelColor,
             color: project.textColor,
-            padding: '44px 52px 40px',
+            padding: isMobile ? '28px 24px 28px' : '44px 52px 40px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
+            gap: isMobile ? '24px' : 0,
           }}>
             <div>
               {/* Date row */}
@@ -139,7 +154,7 @@ const ProjectCard = ({ project, index }) => {
               {/* Title */}
               <h3 style={{
                 fontFamily: '"Times New Roman", Times, serif',
-                fontSize: 'clamp(2.2rem, 4vw, 4rem)',
+                fontSize: isMobile ? 'clamp(2rem, 8vw, 3rem)' : 'clamp(2.2rem, 4vw, 4rem)',
                 fontWeight: 700,
                 lineHeight: 1.0,
                 letterSpacing: '-0.02em',
@@ -156,7 +171,7 @@ const ProjectCard = ({ project, index }) => {
             </div>
 
             <div>
-              {/* View Project CTA — Solid White Box */}
+              {/* View Project CTA */}
               <a 
                 href={project.link} 
                 target="_blank" 
@@ -186,7 +201,7 @@ const ProjectCard = ({ project, index }) => {
                 </svg>
               </a>
 
-              {/* Tags — Positioned below CTA */}
+              {/* Tags */}
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 {project.tags.map(tag => {
                   const isBlackPanel = project.panelColor === '#111212';
@@ -211,76 +226,98 @@ const ProjectCard = ({ project, index }) => {
             </div>
           </div>
 
-          {/* RIGHT: parallax image */}
-          <div style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#0a0a0a' }}>
-            <motion.div style={{ y: imgY, width: '100%', height: '115%', marginTop: '-7.5%' }}>
+          {/* RIGHT: parallax image — hidden on mobile to keep card compact */}
+          {!isMobile && (
+            <div style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#0a0a0a', minHeight: isMobile ? '200px' : 'auto' }}>
+              <motion.div style={{ y: imgY, width: '100%', height: '115%', marginTop: '-7.5%' }}>
+                <img
+                  src={project.imgUrl}
+                  alt={project.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+              </motion.div>
+
+              {/* IMAGE.JPG badge — top right */}
+              <div style={{
+                position: 'absolute', top: 16, right: 16, zIndex: 4,
+                display: 'flex', alignItems: 'center', gap: 6,
+                backgroundColor: isDark ? '#111212' : '#fff',
+                padding: '6px 12px',
+              }}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill={project.panelColor}>
+                  <rect x="3" y="3" width="18" height="18" rx="1" />
+                  <circle cx="8.5" cy="8.5" r="1.5" fill="white" />
+                  <polyline points="21 15 16 10 5 21" fill="white" opacity="0.9" />
+                </svg>
+                <span className="monolith" style={{ fontSize: '0.62rem', color: project.panelColor, letterSpacing: '0.14em' }}>
+                  IMAGE.JPG
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Mobile: show image below text panel */}
+          {isMobile && (
+            <div style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#0a0a0a', height: '200px' }}>
               <img
                 src={project.imgUrl}
                 alt={project.title}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
               />
-            </motion.div>
-
-            {/* IMAGE.JPG badge — top right */}
-            <div style={{
-              position: 'absolute', top: 16, right: 16, zIndex: 4,
-              display: 'flex', alignItems: 'center', gap: 6,
-              backgroundColor: isDark ? '#111212' : '#fff',
-              padding: '6px 12px',
-            }}>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill={project.panelColor}>
-                <rect x="3" y="3" width="18" height="18" rx="1" />
-                <circle cx="8.5" cy="8.5" r="1.5" fill="white" />
-                <polyline points="21 15 16 10 5 21" fill="white" opacity="0.9" />
-              </svg>
-              <span className="monolith" style={{ fontSize: '0.62rem', color: project.panelColor, letterSpacing: '0.14em' }}>
-                IMAGE.JPG
-              </span>
             </div>
-          </div>
-
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-const ProjectFolders = () => (
-  <section id="projects" className="section-frame" style={{ backgroundColor: 'var(--bg-cream)', flexDirection: 'column', width: '100%' }}>
+const ProjectFolders = () => {
+  const width = useWindowWidth();
+  const isMobile = width <= 767;
 
-    {/* Centered header */}
-    <div style={{ padding: '120px 60px 64px', textAlign: 'center' }}>
-      <p className="monolith" style={{ fontSize: '0.7rem', color: 'var(--primary-red)', letterSpacing: '0.22em', marginBottom: 18 }}>
-        05 — FEATURED PROJECTS
-      </p>
-      <h2 className="monolith" style={{ fontSize: 'clamp(3.5rem, 7vw, 8rem)', fontWeight: 900, lineHeight: 0.85, letterSpacing: '-0.05em' }}>
-        FEATURED<br />PROJECTS.
-      </h2>
-      <p style={{ fontSize: '0.88rem', opacity: 0.38, lineHeight: 1.8, marginTop: 28 }}>
-        What happens when curiosity drives the process.
-      </p>
-    </div>
+  return (
+    <section id="projects" className="section-frame" style={{ backgroundColor: 'var(--bg-cream)', flexDirection: 'column', width: '100%' }}>
 
-    {/* Sticky card stack */}
-    <div style={{ position: 'relative', overflow: 'clip', width: '100%' }}>
-      {projects.map((p, i) => <ProjectCard key={p.id} project={p} index={i} />)}
-    </div>
+      {/* Header */}
+      <div style={{ padding: isMobile ? '80px 24px 40px' : '120px 60px 64px', textAlign: 'center' }}>
+        <p className="monolith" style={{ fontSize: '0.7rem', color: 'var(--primary-red)', letterSpacing: '0.22em', marginBottom: 18 }}>
+          05 — FEATURED PROJECTS
+        </p>
+        <h2 className="monolith" style={{ fontSize: isMobile ? 'clamp(2.5rem, 12vw, 5rem)' : 'clamp(3.5rem, 7vw, 8rem)', fontWeight: 900, lineHeight: 0.85, letterSpacing: '-0.05em' }}>
+          FEATURED<br />PROJECTS.
+        </h2>
+        <p style={{ fontSize: '0.88rem', opacity: 0.38, lineHeight: 1.8, marginTop: 28 }}>
+          What happens when curiosity drives the process.
+        </p>
+      </div>
 
-    {/* Footer */}
-    <div style={{
-      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-      padding: '48px 60px', borderTop: '1px solid rgba(17,18,18,0.1)',
-    }}>
-      <p className="monolith" style={{ fontSize: '0.65rem', opacity: 0.28, letterSpacing: '0.22em' }}>
-        ALL PROJECTS — 2022 TO PRESENT
-      </p>
-      <a href="https://github.com/AnimeshLALA" target="_blank" rel="noreferrer"
-        className="monolith"
-        style={{ fontSize: '0.7rem', color: 'var(--primary-red)', textDecoration: 'none', letterSpacing: '0.16em' }}>
-        MORE ON GITHUB ↗
-      </a>
-    </div>
-  </section>
-);
+      {/* Card stack */}
+      <div style={{ position: 'relative', overflow: 'clip', width: '100%' }}>
+        {projects.map((p, i) => <ProjectCard key={p.id} project={p} index={i} />)}
+      </div>
+
+      {/* Footer */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '12px',
+        padding: isMobile ? '32px 24px' : '48px 60px',
+        borderTop: '1px solid rgba(17,18,18,0.1)',
+      }}>
+        <p className="monolith" style={{ fontSize: '0.65rem', opacity: 0.28, letterSpacing: '0.22em' }}>
+          ALL PROJECTS — 2022 TO PRESENT
+        </p>
+        <a href="https://github.com/AnimeshLALA" target="_blank" rel="noreferrer"
+          className="monolith"
+          style={{ fontSize: '0.7rem', color: 'var(--primary-red)', textDecoration: 'none', letterSpacing: '0.16em' }}>
+          MORE ON GITHUB ↗
+        </a>
+      </div>
+    </section>
+  );
+};
 
 export default ProjectFolders;

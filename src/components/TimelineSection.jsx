@@ -1,4 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+const useWindowWidth = () => {
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+  useEffect(() => {
+    const handler = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return width;
+};
 
 const projects = [
   {
@@ -31,23 +41,28 @@ const projects = [
 ];
 
 const TimelineSection = () => {
+  const width = useWindowWidth();
+  const isMobile = width <= 767;
+  const isTablet = width <= 1024;
+
   return (
     <section
       id="timeline"
       style={{
         backgroundColor: '#F5F0E8',
         color: '#1A1A1A',
-        /* no padding — cards go wall to wall */
       }}
     >
-      {/* ── Section Label ── */}
+      {/* Section Label */}
       <div style={{
-        padding: '70px 60px 50px',
+        padding: isMobile ? '40px 20px 30px' : isTablet ? '50px 40px 40px' : '70px 60px 50px',
         borderBottom: '3px solid #1A1A1A',
         backgroundColor: 'white',
         display: 'flex',
         alignItems: 'flex-end',
         justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '16px',
       }}>
         <h1
           className="monolith"
@@ -69,7 +84,7 @@ const TimelineSection = () => {
         </div>
       </div>
 
-      {/* ── Full-width Project Cards ── */}
+      {/* Project Cards */}
       {projects.map((proj, i) => (
         <div
           key={i}
@@ -79,12 +94,12 @@ const TimelineSection = () => {
             backgroundColor: proj.color,
             borderBottom: i < projects.length - 1 ? '3px solid rgba(0,0,0,0.25)' : 'none',
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            minHeight: '100vh',
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+            minHeight: isMobile ? 'auto' : '100vh',
             overflow: 'hidden',
           }}
         >
-          {/* ── LEFT: Text ── */}
+          {/* LEFT: Text */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
 
             {/* Folder tab */}
@@ -113,7 +128,7 @@ const TimelineSection = () => {
 
             {/* Content */}
             <div style={{
-              padding: '44px 60px 60px',
+              padding: isMobile ? '28px 20px 36px' : isTablet ? '36px 40px 48px' : '44px 60px 60px',
               display: 'flex',
               flexDirection: 'column',
               gap: '18px',
@@ -139,7 +154,7 @@ const TimelineSection = () => {
               {/* Title */}
               <h2 style={{
                 fontFamily: '"Times New Roman", Times, serif',
-                fontSize: 'clamp(2.8rem, 5vw, 5rem)',
+                fontSize: isMobile ? 'clamp(2rem, 10vw, 3.5rem)' : 'clamp(2.8rem, 5vw, 5rem)',
                 fontWeight: 700,
                 color: proj.color === '#1A1A1A' ? 'white' : '#1A1A1A',
                 lineHeight: 1.0,
@@ -182,7 +197,7 @@ const TimelineSection = () => {
                 VIEW PROJECT <span style={{ fontSize: '1.05rem' }}>↗</span>
               </a>
 
-              {/* Tags — pushed to bottom */}
+              {/* Tags */}
               <div style={{
                 display: 'flex',
                 gap: '8px',
@@ -210,37 +225,39 @@ const TimelineSection = () => {
             </div>
           </div>
 
-          {/* ── RIGHT: Image ── */}
-          <div style={{ position: 'relative', overflow: 'hidden' }}>
-            <img
-              src={proj.image}
-              alt={proj.name}
-              className="fp-img"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'center',
-                display: 'block',
-                transition: 'transform 0.7s cubic-bezier(0.23, 1, 0.32, 1)',
-              }}
-            />
-            {/* IMAGE.JPG badge */}
-            <div style={{
-              position: 'absolute',
-              top: '20px',
-              right: '20px',
-              backgroundColor: '#1A1A1A',
-              color: 'white',
-              padding: '5px 14px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-            }}>
-              <span style={{ fontSize: '0.6rem', opacity: 0.55 }}>JPG</span>
-              <span className="monolith" style={{ fontSize: '0.72rem', letterSpacing: '0.1em' }}>IMAGE.JPG</span>
+          {/* RIGHT: Image (hidden on mobile) */}
+          {!isMobile && (
+            <div style={{ position: 'relative', overflow: 'hidden', minHeight: isMobile ? '240px' : 'auto' }}>
+              <img
+                src={proj.image}
+                alt={proj.name}
+                className="fp-img"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                  display: 'block',
+                  transition: 'transform 0.7s cubic-bezier(0.23, 1, 0.32, 1)',
+                }}
+              />
+              {/* IMAGE.JPG badge */}
+              <div style={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                backgroundColor: '#1A1A1A',
+                color: 'white',
+                padding: '5px 14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}>
+                <span style={{ fontSize: '0.6rem', opacity: 0.55 }}>JPG</span>
+                <span className="monolith" style={{ fontSize: '0.72rem', letterSpacing: '0.1em' }}>IMAGE.JPG</span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       ))}
 

@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import animeshPhoto from '../assets/animesh Upscaled.png';
 
+const useWindowWidth = () => {
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+  useEffect(() => {
+    const handler = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return width;
+};
+
 const ResumeSection = () => {
+  const width = useWindowWidth();
+  const isMobile = width <= 767;
+  const isTablet = width <= 1024;
+  const isSmall = width <= 1024; // mobile + tablet
+
   const fadeInUp = {
     initial: { opacity: 0, y: 30 },
     whileInView: { opacity: 1, y: 0 },
@@ -29,7 +44,7 @@ const ResumeSection = () => {
       height: 'auto',
       display: 'flex',
       flexDirection: 'column',
-      padding: '120px 10%',
+      padding: isMobile ? '80px 5%' : isTablet ? '100px 7%' : '120px 10%',
       backgroundColor: 'white',
       color: '#1A1A1A',
       position: 'relative',
@@ -37,9 +52,14 @@ const ResumeSection = () => {
     }}>
       
       {/* Top Header Section */}
-      <div style={{ display: 'grid', gridTemplateColumns: '350px 1fr', gap: '80px', marginBottom: '60px' }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: isSmall ? '1fr' : '350px 1fr',
+        gap: isSmall ? '40px' : '80px',
+        marginBottom: '60px'
+      }}>
         <motion.div 
-          style={{ position: 'relative' }}
+          style={{ position: 'relative', maxWidth: isSmall ? '280px' : '350px', margin: isSmall ? '0 auto' : '0' }}
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -84,10 +104,10 @@ const ResumeSection = () => {
           />
         </motion.div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', textAlign: isSmall ? 'center' : 'left', alignItems: isSmall ? 'center' : 'flex-start' }}>
           <motion.h2 
             className="monolith" 
-            style={{ fontSize: '6.5rem', lineHeight: 0.8, marginBottom: '10px', color: '#000' }}
+            style={{ fontSize: isMobile ? 'clamp(3rem, 15vw, 5rem)' : isTablet ? 'clamp(4rem, 10vw, 5.5rem)' : '6.5rem', lineHeight: 0.8, marginBottom: '10px', color: '#000' }}
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -107,7 +127,7 @@ const ResumeSection = () => {
           </motion.div>
           
           <motion.div 
-            style={{ marginTop: '40px' }}
+            style={{ marginTop: '40px', textAlign: 'left' }}
             {...fadeInUp}
             transition={{ delay: 0.5 }}
           >
@@ -123,7 +143,11 @@ const ResumeSection = () => {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '350px 1fr', gap: '80px' }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: isSmall ? '1fr' : '350px 1fr',
+        gap: isSmall ? '40px' : '80px'
+      }}>
         
         {/* Left Column */}
         <motion.aside
@@ -248,10 +272,15 @@ const ResumeSection = () => {
               <motion.div 
                 key={i}
                 variants={slideInRight}
-                whileHover={{ x: 10, transition: { duration: 0.3 } }}
-                style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: '40px', marginBottom: '50px' }}
+                whileHover={{ x: isMobile ? 0 : 10, transition: { duration: 0.3 } }}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: isMobile ? '1fr' : '200px 1fr',
+                  gap: isMobile ? '8px' : '40px',
+                  marginBottom: '50px'
+                }}
               >
-                <div style={{ textAlign: 'right' }}>
+                <div style={{ textAlign: isMobile ? 'left' : 'right' }}>
                   <p style={{ fontWeight: 800, fontSize: '0.9rem' }}>{exp.role}</p>
                   <p style={{ fontSize: '0.85rem', opacity: 0.6 }}>{exp.period}</p>
                   <p style={{ fontSize: '0.8rem', opacity: 0.5, marginTop: '4px' }}>{exp.location}</p>

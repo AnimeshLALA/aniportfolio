@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
+const useWindowWidth = () => {
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+  useEffect(() => {
+    const handler = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return width;
+};
+
 const Biography = () => {
+  const width = useWindowWidth();
+  const isMobile = width <= 767;
+  const isTablet = width <= 1024;
+
   return (
     <section id="biography" className="biography" style={{ 
       flexDirection: 'column', 
       justifyContent: 'center', 
-      padding: '0 10%' 
+      padding: isMobile ? '60px 6%' : isTablet ? '80px 8%' : '0 10%'
     }}>
       <motion.div
         initial={{ opacity: 0, y: 50 }}
@@ -18,14 +32,14 @@ const Biography = () => {
         </h2>
         
         <div style={{ maxWidth: '800px' }}>
-          <h3 className="monolith" style={{ fontSize: '3rem', lineHeight: 1.1, marginBottom: '60px' }}>
+          <h3 className="monolith" style={{ fontSize: isMobile ? 'clamp(1.8rem, 7vw, 2.5rem)' : '3rem', lineHeight: 1.1, marginBottom: '60px' }}>
             A MAN WHO SAW THE WORLD BEYOND THE SHORES OF NIPPON.
           </h3>
           
           <div style={{ 
             display: 'grid', 
-            gridTemplateColumns: '1fr 1fr', 
-            gap: '60px',
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
+            gap: isMobile ? '30px' : '60px',
             fontFamily: 'Manrope',
             fontSize: '1.1rem',
             lineHeight: 1.8
@@ -41,15 +55,17 @@ const Biography = () => {
       </motion.div>
 
       {/* Decorative vertical lines */}
-      <div style={{
-        position: 'absolute',
-        bottom: '0',
-        right: '20%',
-        width: '1px',
-        height: '40vh',
-        background: 'var(--primary-red)',
-        opacity: 0.3
-      }} />
+      {!isMobile && (
+        <div style={{
+          position: 'absolute',
+          bottom: '0',
+          right: '20%',
+          width: '1px',
+          height: '40vh',
+          background: 'var(--primary-red)',
+          opacity: 0.3
+        }} />
+      )}
     </section>
   );
 };
