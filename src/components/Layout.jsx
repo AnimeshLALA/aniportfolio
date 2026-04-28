@@ -22,9 +22,9 @@ const Layout = ({ children }) => {
 
   const menuLinks = [
     { name: 'HOME', id: 'hero' },
-    { name: 'HISTORY', id: 'biography' },
-    { name: 'JOURNEY', id: 'map' },
+    { name: 'About Me', id: 'biography' },
     { name: 'PROJECTS', id: 'projects' },
+    { name: 'Contact', id: 'contact' },
   ];
 
   // Track current section for page numbering

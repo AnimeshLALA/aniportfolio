@@ -82,8 +82,8 @@ const Hero = () => {
           textAlign: 'right',
           zIndex: 10
         }}>
-          <p className="monolith" style={{ marginBottom: '10px', color: 'var(--primary-red)' }}>HISTORY ———</p>
-          <p>The first of the three great unifiers of Japan, known for his revolutionary military tactics and ruthless ambition.</p>
+          <p className="monolith" style={{ marginBottom: '10px', color: 'var(--primary-red)' }}>2+ Years Experience ———</p>
+          <p>Design what People NEED.</p>
         </div>
       )}
       

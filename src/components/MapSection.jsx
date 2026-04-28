@@ -11,23 +11,25 @@ const MapSection = () => {
     }}>
       <div style={{ flex: 1 }}>
         <h2 className="monolith" style={{ fontSize: '1rem', color: 'var(--primary-red)', marginBottom: '40px' }}>
-          03 — JOURNEY ———
+          03 — Timeline
         </h2>
         <h3 className="monolith" style={{ fontSize: '4.5rem', lineHeight: 1, marginBottom: '20px' }}>
-          FROM 2002<br />TO PRESENT
+          Designed For People.Tested On Real Ones.
         </h3>
         <p style={{ maxWidth: '400px', fontSize: '1rem', opacity: 0.8, lineHeight: 1.6 }}>
-          A trajectory defined by growth, from Chennai to Kolkata, and now expanding horizons in Malaysia. Each milestone represents a chapter of professional evolution.
+         
+Started making things look good. Learned to make them work better.
+From social creatives to data-driven interfaces — the craft kept deepening.
         </p>
 
         <div style={{ marginTop: '40px', display: 'flex', gap: '20px' }}>
           <div style={{ padding: '20px', border: '1px solid var(--primary-red)', width: '150px' }}>
-            <div className="monolith" style={{ fontSize: '1.5rem' }}>04</div>
-            <div style={{ fontSize: '0.7rem', opacity: 0.6 }}>MAJOR CITIES</div>
+            <div className="monolith" style={{ fontSize: '1.5rem' }}>5+</div>
+            <div style={{ fontSize: '0.7rem', opacity: 0.6 }}>Events Complete</div>
           </div>
           <div style={{ padding: '20px', border: '1px solid var(--primary-red)', width: '150px' }}>
-            <div className="monolith" style={{ fontSize: '1.5rem' }}>2024</div>
-            <div style={{ fontSize: '0.7rem', opacity: 0.6 }}>CURRENT YEAR</div>
+            <div className="monolith" style={{ fontSize: '1.5rem' }}>10+</div>
+            <div style={{ fontSize: '0.7rem', opacity: 0.6 }}>Projects Completed</div>
           </div>
         </div>
       </div>
@@ -53,11 +55,11 @@ const MapSection = () => {
           
           {/* Point 1: Origin (Top) */}
           <circle cx="50" cy="50" r="4" fill="var(--primary-red)" />
-          <text x="70" y="55" className="monolith" style={{ fontSize: '10px', fill: 'var(--ink-black)' }}>2002 — ORIGIN</text>
+          <text x="70" y="55" className="monolith" style={{ fontSize: '10px', fill: 'var(--ink-black)' }}>2003— ORIGIN</text>
           
           {/* Point 2: SRM */}
           <circle cx="50" cy="150" r="4" fill="var(--primary-red)" />
-          <text x="70" y="155" className="monolith" style={{ fontSize: '10px', fill: 'var(--ink-black)' }}>2020 — SRM CHENNAI</text>
+          <text x="70" y="155" className="monolith" style={{ fontSize: '10px', fill: 'var(--ink-black)' }}>2022— SRM CHENNAI</text>
           
           {/* Point 3: Clirnet */}
           <circle cx="50" cy="250" r="4" fill="var(--primary-red)" />
