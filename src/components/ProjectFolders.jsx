@@ -9,7 +9,7 @@ const projects = [
     date: 'Mar 2024',
     title: 'MacroForge',
     tagline: 'Turn hassle into seamless key mapping with Macro Forge—where powerful customization feels simple and easy to use.',
-    tags: ['Software Design', 'Dashboard Design',''],
+    tags: ['User-Centered Design', 'Interaction Design','Personalization'],
     imgUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80',
   },
   {
