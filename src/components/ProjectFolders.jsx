@@ -13,7 +13,7 @@ const projects = [
     tagline: 'Turn hassle into seamless key mapping with Macro Forge—where powerful customization feels simple and easy to use.',
     tags: ['User-Centered Design', 'Interaction Design','Personalization'],
     imgUrl: macroImg,
-    link: 'https://www.behance.net/gallery/248365085/MacroForge',
+    link: 'https://www.behance.net/gallery/248365085/MacroForge?tracking_source=search_projects|macroforge&l=0',
   },
   {
     id: '02',
