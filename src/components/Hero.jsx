@@ -83,7 +83,8 @@ const Hero = () => {
           zIndex: 10
         }}>
           <p className="monolith" style={{ marginBottom: '10px', color: 'var(--primary-red)' }}>2+ Years Experience ———</p>
-          <p>Design what People NEED.</p>
+          <p>Started with posters. Graduated to products.
+Now designing data-driven experiences that actually make sense to the people using them.
         </div>
       )}
       

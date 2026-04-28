@@ -14,7 +14,7 @@ const MapSection = () => {
           03 — Timeline
         </h2>
         <h3 className="monolith" style={{ fontSize: '4.5rem', lineHeight: 1, marginBottom: '20px' }}>
-          Designed For People.Tested On Real Ones.
+          Design what People NEED
         </h3>
         <p style={{ maxWidth: '400px', fontSize: '1rem', opacity: 0.8, lineHeight: 1.6 }}>
          
