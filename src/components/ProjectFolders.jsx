@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
+import macroImg from '../assets/Macro.png';
+
 const projects = [
   {
     id: '01',
@@ -10,7 +12,7 @@ const projects = [
     title: 'MacroForge',
     tagline: 'Turn hassle into seamless key mapping with Macro Forge—where powerful customization feels simple and easy to use.',
     tags: ['User-Centered Design', 'Interaction Design','Personalization'],
-    imgUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80',
+    imgUrl: macroImg,
   },
   {
     id: '02',
