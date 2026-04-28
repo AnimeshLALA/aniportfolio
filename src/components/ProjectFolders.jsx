@@ -13,6 +13,7 @@ const projects = [
     tagline: 'Turn hassle into seamless key mapping with Macro Forge—where powerful customization feels simple and easy to use.',
     tags: ['User-Centered Design', 'Interaction Design','Personalization'],
     imgUrl: macroImg,
+    link: 'https://www.behance.net/gallery/248365085/MacroForge',
   },
   {
     id: '02',
@@ -23,6 +24,7 @@ const projects = [
     tagline: "From 'I hate this portal' to a product doctors actually want to use.",
     tags: ['SaaS', 'Redesign'],
     imgUrl: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=80',
+    link: '#',
   },
   {
     id: '03',
@@ -33,6 +35,7 @@ const projects = [
     tagline: 'Getting students to actually engage with complex business problems.',
     tags: ['EdTech', '0 → 1'],
     imgUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80',
+    link: '#',
   },
   {
     id: '04',
@@ -43,6 +46,7 @@ const projects = [
     tagline: 'Automated dosage alerts, built for real patient safety at scale.',
     tags: ['Healthcare', 'React Native'],
     imgUrl: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=1200&q=80',
+    link: '#',
   },
 ];
 
@@ -153,17 +157,21 @@ const ProjectCard = ({ project, index }) => {
 
             <div>
               {/* View Project CTA — Solid White Box */}
-              <a href="#" style={{
-                display: 'inline-flex', 
-                alignItems: 'center', 
-                gap: '12px',
-                textDecoration: 'none', 
-                marginBottom: '32px',
-                backgroundColor: '#FFFFFF',
-                padding: '12px 28px',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-              }}
-              className="cta-hover-effect"
+              <a 
+                href={project.link} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                style={{
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '12px',
+                  textDecoration: 'none', 
+                  marginBottom: '32px',
+                  backgroundColor: '#FFFFFF',
+                  padding: '12px 28px',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                }}
+                className="cta-hover-effect"
               >
                 <span className="monolith" style={{ 
                   fontSize: '0.8rem', 
